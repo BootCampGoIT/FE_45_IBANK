@@ -9,7 +9,11 @@ export const NavigationWrapper = styled.nav`
     margin-right: 20px;
   }
   .navigationListItem {
-    color: cornflowerblue;
+    color: #6495ed;
     text-transform: uppercase;
+    cursor: pointer;
+  }
+  .navigationListItem:hover {
+    color: #324566;
   }
 `;

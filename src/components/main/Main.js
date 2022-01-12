@@ -1,11 +1,13 @@
 import React from "react";
-import ClassComponent from "../materials/ClassComponent";
+import AuthForm from "../auth/AuthForm";
+import LoanForm from "../creditForm/LoanForm";
 
 import { MainWrapper } from "./MainStyled";
 const Main = () => {
   return (
     <MainWrapper>
-      <ClassComponent />
+      {/* <AuthForm /> */}
+      <LoanForm />
     </MainWrapper>
   );
 };
