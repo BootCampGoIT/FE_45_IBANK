@@ -8,4 +8,14 @@ export const HeaderWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+
+  .iconMenu {
+    width: 40px;
+    height: 40px;
+    fill: cornflowerblue;
+    &:hover {
+      cursor: pointer;
+      fill: #2d4570;
+    }
+  }
 `;
