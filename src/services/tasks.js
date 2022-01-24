@@ -21,7 +21,7 @@ const addNewTask = async (task) => {
       process.env.REACT_APP_BASE_URL + "/tasks.json",
       task
     );
-    return response.data.name;
+    return response.data.name; //id
   } catch (error) {
     throw new Error(error.message);
   }

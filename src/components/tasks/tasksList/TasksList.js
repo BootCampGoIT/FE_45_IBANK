@@ -6,7 +6,7 @@ const TasksListItem = ({ task, removeTask }) => {
     <li>
       <h3>{task.name}</h3>
       <p>{task.description}</p>
-      <button type='button' onClick={removeItem}>
+      <button type='button' onClick={removeTask}>
         Delete
       </button>
     </li>

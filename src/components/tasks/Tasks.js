@@ -1,100 +1,132 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import { addNewTask, getAllTasks } from "../../services/tasks";
+import Modal from "../modal/Modal";
 import TasksForm from "./taskForm/TasksForm";
 import TasksList from "./tasksList/TasksList";
-import Modal from "../modal/Modal";
-import { addNewTask, getAllTasks, removeTaskItem } from "../../services/tasks";
 
-import withLog from "../hoc/WithLog";
+const initialState = {
+  tasks: [],
+  isTaskFormOpen: false,
+  isLoading: false,
+  error: "",
+};
 
-class Tasks extends Component {
-  state = {
-    tasks: [],
-    isTaskFormOpen: false,
-    isLoading: false,
-    error: "",
+const Tasks = () => {
+  const [state, setState] = useState(initialState);
+
+  useEffect(() => {
+    getAllTasks().then((tasks) => setState((prev) => ({ ...prev, tasks })));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
+    console.log("updated");
+  }, [state.tasks]);
+
+  const onToggle = () => {
+    setState((prev) => ({ ...prev, isTaskFormOpen: !prev.isTaskFormOpen }));
   };
 
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-    try {
-      const tasks = await getAllTasks();
-      this.setState({ tasks });
-    } catch {
-      this.setState({ error: "Something went wrong!" });
-    } finally {
-      await this.setState({ isLoading: false });
-    }
-  }
-
-  addTask = async (task) => {
+  const addTask = async (task) => {
     try {
       const id = await addNewTask(task);
-      this.setState((prev) => ({ tasks: [...prev.tasks, { id, ...task }] }));
-    } catch (error) {
-      this.setState({ error: "Something went wrong!" });
-    }
-  };
-
-  removeTask = async (id) => {
-    try {
-      await removeTaskItem(id);
-      this.setState((prev) => ({
-        tasks: prev.tasks.filter((task) => task.id !== id),
+      // console.log(id);
+      setState((prev) => ({
+        ...prev,
+        tasks: [...prev.tasks, { id, ...task }],
       }));
     } catch (error) {
-      this.setState({ error: "Something went wrong!" });
+      // setState({ error: "Something went wrong!" });
     }
   };
-  onTaskFormOpen = () =>
-    this.setState((prev) => ({ isTaskFormOpen: !prev.isTaskFormOpen }));
-  render() {
-    return (
-      <div>
-        {this.state.isLoading && (
-          <Modal>
-            <h2>...loading</h2>
-          </Modal>
-        )}
-        <button type='button' onClick={this.onTaskFormOpen}>
-          Open
-        </button>
-        {this.state.isTaskFormOpen && (
-          <Modal toggleModal={this.onTaskFormOpen}>
-            <TasksForm
-              addTask={this.addTask}
-              toggleModal={this.onTaskFormOpen}
-            />
-          </Modal>
-        )}
-        <hr />
-        <TasksList tasks={this.state.tasks} removeTask={this.removeTask} />
-      </div>
-    );
-  }
-}
 
-export default withLog(Tasks);
+  return (
+    <>
+      <button type='button' onClick={onToggle}>
+        Toggle
+      </button>
+      {state.isTaskFormOpen && (
+        <Modal toggleModal={onToggle}>
+          <TasksForm addTask={addTask} />
+        </Modal>
+      )}
+      <TasksList tasks={state.tasks} />
+    </>
+  );
+};
 
-// const getData = (callback) => {
-//   callback();
+export default Tasks;
+
+// import React, { Component } from "react";
+// import TasksForm from "./taskForm/TasksForm";
+// import TasksList from "./tasksList/TasksList";
+// import Modal from "../modal/Modal";
+// import { addNewTask, getAllTasks, removeTaskItem } from "../../services/tasks";
+// class Tasks extends Component {
+// state = {
+//   tasks: [],
+//   isTaskFormOpen: false,
+//   isLoading: false,
+//   error: "",
 // };
 
-// const getData = (init) => {
-//   return (value) => {
-//     init += value;
-//     console.log(init);
+//   async componentDidMount() {
+//     this.setState({ isLoading: true });
+//     try {
+//       const tasks = await getAllTasks();
+//       this.setState({ tasks });
+//     } catch {
+//       this.setState({ error: "Something went wrong!" });
+//     } finally {
+//       await this.setState({ isLoading: false });
+//     }
+//   }
+
+//   addTask = async (task) => {
+//     try {
+//       const id = await addNewTask(task);
+//       this.setState((prev) => ({ tasks: [...prev.tasks, { id, ...task }] }));
+//     } catch (error) {
+//       this.setState({ error: "Something went wrong!" });
+//     }
 //   };
-// };
 
-// const getResult = (init) => (value) => () => {
-//   init += value;
-//   console.log(init);
-// };
+//   removeTask = async (id) => {
+//     try {
+//       await removeTaskItem(id);
+//       this.setState((prev) => ({
+//         tasks: prev.tasks.filter((task) => task.id !== id),
+//       }));
+//     } catch (error) {
+//       this.setState({ error: "Something went wrong!" });
+//     }
+//   };
+//   onTaskFormOpen = () =>
+//     this.setState((prev) => ({ isTaskFormOpen: !prev.isTaskFormOpen }));
+//   render() {
+//     return (
+//       <div>
+//         {this.state.isLoading && (
+//           <Modal>
+//             <h2>...loading</h2>
+//           </Modal>
+//         )}
+//         <button type='button' onClick={this.onTaskFormOpen}>
+//           Open
+//         </button>
+//         {this.state.isTaskFormOpen && (
+//           <Modal toggleModal={this.onTaskFormOpen}>
+//             <TasksForm
+//               addTask={this.addTask}
+//               toggleModal={this.onTaskFormOpen}
+//             />
+//           </Modal>
+//         )}
+//         <hr />
+//         <TasksList tasks={this.state.tasks} removeTask={this.removeTask} />
+//       </div>
+//     );
+//   }
+// }
 
-// const res = getData(20);
-// res(5);
-// res(5);
-// res(5);
-// res(5);
-// res(5);
-// res(5);
+// export default Tasks;
