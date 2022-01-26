@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
 import { addNewTask, getAllTasks } from "../../services/tasks";
-import Modal from "../modal/Modal";
 import TasksForm from "./taskForm/TasksForm";
 import TasksList from "./tasksList/TasksList";
 
 const initialState = {
   tasks: [],
-  isTaskFormOpen: false,
   isLoading: false,
   error: "",
 };
@@ -20,7 +19,6 @@ const Tasks = () => {
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(state.tasks));
-    console.log("updated");
   }, [state.tasks]);
 
   const onToggle = () => {
@@ -42,14 +40,8 @@ const Tasks = () => {
 
   return (
     <>
-      <button type='button' onClick={onToggle}>
-        Toggle
-      </button>
-      {state.isTaskFormOpen && (
-        <Modal toggleModal={onToggle}>
-          <TasksForm addTask={addTask} />
-        </Modal>
-      )}
+      <TasksForm addTask={addTask} />
+      <hr />
       <TasksList tasks={state.tasks} />
     </>
   );

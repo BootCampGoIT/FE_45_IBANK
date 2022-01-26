@@ -1,6 +1,5 @@
-
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import { LanguageContext, MessageContext } from "../../App";
 
 const initialState = {
   name: "",
@@ -8,7 +7,12 @@ const initialState = {
 };
 
 const TasksForm = ({ addTask }) => {
+  const message = useContext(MessageContext);
   const [state, setState] = useState(initialState);
+  const { language } = useContext(LanguageContext);
+  const {
+    tasks: { tasksForm },
+  } = language;
 
   const onHandleSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +30,10 @@ const TasksForm = ({ addTask }) => {
 
   return (
     <>
+      <h2>{message}</h2>
       <form onSubmit={onHandleSubmit}>
         <label>
-          Name:
+          {tasksForm.name}:
           <input
             type='text'
             value={state.name}
@@ -37,97 +42,17 @@ const TasksForm = ({ addTask }) => {
           />
         </label>
         <label>
-          Description:
+          {tasksForm.description}:
           <textarea
             value={state.description}
             name='description'
             onChange={onHandleChange}
           />
         </label>
-        <button type='submit'>Add task</button>
+        <button type='submit'>{tasksForm.addTask}</button>
       </form>
     </>
   );
 };
 
 export default TasksForm;
-
-// class TasksForm extends Component {
-//   state = {
-//     state={
-
-//     }
-//    }
-//   render() {
-//     return (
-
-//     );
-//   }
-// }
-
-// export default TasksForm;
-
-// import React, { Component } from "react";
-
-// const initialState = { name: "", description: "" };
-
-// class TasksForm extends Component {
-//   state = initialState;
-
-//   onHandleChange = (e) => {
-//     const { name, value } = e.target;
-//     this.setState({ [name]: value });
-//   };
-//   onHandleSubmit = (e) => {
-//     e.preventDefault();
-//     this.props.addTask(this.state);
-//     this.props.toggleModal();
-//   };
-//   render() {
-//     return (
-// <form onSubmit={this.onHandleSubmit}>
-//   <label>
-//     Name:
-//     <input
-//       type='text'
-//       value={this.state.name}
-//       name='name'
-//       onChange={this.onHandleChange}
-//     />
-//   </label>
-//   <label>
-//     Description:
-//     <textarea
-//       value={this.state.description}
-//       name='description'
-//       onChange={this.onHandleChange}
-//     />
-//   </label>
-//   <button type='submit'>Add task</button>
-// </form>
-//     );
-//   }
-// }
-
-// export default TasksForm;
-
-// const getResult = (initialValue) => {
-//   let value = initialValue;
-
-//   const setValue = (step) => {
-//     value += step;
-//     console.log(value);
-//   };
-
-//   return [value, setValue];
-// };
-// getResult.test = "Hello";
-// console.dir(getResult);
-
-// const [value, setValue] = getResult(0);
-
-// setValue(10);
-// setValue(10);
-// setValue(10);
-// setValue(10);
-// console.log(value);

@@ -16,11 +16,11 @@ export const mainRoutes = [
     path: "/transfer",
   },
   {
-    name: "sign up",
+    name: "signUp",
     path: "/signup",
   },
   {
-    name: "sign in",
+    name: "signIn",
     path: "/signin",
   },
 ];

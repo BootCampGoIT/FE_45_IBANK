@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navigation from "../navigation/Navigation";
 import { HeaderWrapper } from "./HeaderStyled";
 import sprite from "../../assets/header/headerSprite.svg";
 import axios from "axios";
 import Modal from "../modal/Modal";
+import { MessageContext } from "../App";
+import LanguageSelector from "../lanaguageSelector/LanguageSelector";
 
 const initialState = {
   width: window.innerWidth,
@@ -13,6 +15,7 @@ const initialState = {
 
 const Header = () => {
   const [state, setState] = useState(initialState);
+  const message = useContext(MessageContext);
 
   useEffect(() => {
     window.addEventListener("resize", resizeWindow);
@@ -34,21 +37,29 @@ const Header = () => {
   };
 
   return (
+    // <MessageContext.Consumer>
+    //   {(value) => (
     <HeaderWrapper>
-      <h3 style={{ color: "cornflowerblue" }}>IBANK</h3>
+      <h3 style={{ color: "cornflowerblue" }}>{message}</h3>
       {state.width < state.breakPoint ? (
         <svg className='iconMenu' onClick={toggleModal}>
           <use href={sprite + "#icon-menu"} />
         </svg>
       ) : (
-        <Navigation />
+        <>
+          <Navigation />
+          <LanguageSelector />
+        </>
       )}
       {state.isModalOpen && (
         <Modal toggleModal={toggleModal}>
-          <h2>Hello Modal!!!</h2>
+          <Navigation />
+          <LanguageSelector />
         </Modal>
       )}
     </HeaderWrapper>
+    // )}
+    // </MessageContext.Consumer>
   );
 };
 

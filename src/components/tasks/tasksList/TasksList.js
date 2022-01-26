@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
+import { LanguageContext } from "../../App";
 
 const TasksListItem = ({ task, removeTask }) => {
+  const {
+    language: {
+      tasks: { tasksListItem },
+    },
+  } = useContext(LanguageContext);
   const removeItem = () => removeTask(task.id);
   return (
     <li>
       <h3>{task.name}</h3>
       <p>{task.description}</p>
       <button type='button' onClick={removeTask}>
-        Delete
+        {tasksListItem.delete}
       </button>
     </li>
   );
